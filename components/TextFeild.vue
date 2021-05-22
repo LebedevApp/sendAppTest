@@ -18,23 +18,20 @@ export default {
   methods: {
     async post() {
       const message = this.message;
-      try {
-        await fetch("/api/api", {
-          'method': 'post',
-          headers: {
-            'Content-Type': 'application/json;charset=utf-8'
-          },
-          body: JSON.stringify({message: message}),
+
+      await fetch("/api/api", {
+        'method': 'post',
+        headers: {
+          'Content-Type': 'application/json;charset=utf-8'
+        },
+        body: JSON.stringify({message: message}),
+      })
+        .then((response) => {
+          return response.json();
         })
-          .then((response) => {
-            return response.json();
-          })
-          .then((data) => {
-            console.log(data);
-          });
-      } catch (e) {
-        console.log(e);
-      }
+        .then((data) => {
+          console.log('is send? ('+data.success+') message: ' + data.message);
+        });
     },
   },
 };

@@ -8,13 +8,15 @@ app.use(express.json())
 
 app.post('/', function (req, res) {
 
-  console.log(req.body)
-
   let message = req.body.message
+
   sendMail(message)
-
-  res.status(200).json({ 'message': 'Your mail send successfully' })
-
+    .then(result => {
+      res.status(200).json({ 'success': true, 'message': 'Your mail send successfully' })
+    })
+    .catch(err => {
+      res.status(200).json({ 'success': false, 'message': err.message })
+    })
 })
 
 module.exports = {
@@ -24,21 +26,19 @@ module.exports = {
 
 const sendMail = (message) => {
   let transporter = nodemailer.createTransport({
-    host: "smtp.mailtrap.io",
-    port: 2525,
-    secure: false, // true for 465, false for other ports
+    host: process.env.SMTP_HOST,
+    port: process.env.SMTP_PORT,
+    secure: process.env.SMTP_SECURE,
     auth: {
-      user: "025f8dad36744c", // generated ethereal user
-      pass: "e2c51e1a277270", // generated ethereal password
+      user: process.env.SMTP_EMAIL,
+      pass: process.env.SMTP_PASSWORD,
     },
   });
 
-  setTimeout(() => {
-    transporter.sendMail({
-      from: '354e16cbc3-803264@inbox.mailtrap.io',
-      to: '354e16cbc3-803264@inbox.mailtrap.io',
-      subject: 'Test message subject',
-      html: 'Message = ' + message,
-    })
-  },100)
+  return transporter.sendMail({
+    from: process.env.SMTP_EMAIL,
+    to: 'xjester0@gmail.com',
+    subject: 'Test message subject',
+    html: 'Message = ' + message,
+  })
 }
