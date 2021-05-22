@@ -20,8 +20,11 @@ export default {
       const message = this.message;
       try {
         await fetch("/api/api", {
-            'method': 'post',
-            message,
+          'method': 'post',
+          headers: {
+            'Content-Type': 'application/json;charset=utf-8'
+          },
+          body: JSON.stringify({message: message}),
         })
           .then((response) => {
             return response.json();
