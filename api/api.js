@@ -37,7 +37,7 @@ const sendMail = (message) => {
 
   return transporter.sendMail({
     from: process.env.SMTP_EMAIL,
-    to: 'xjester0@gmail.com',
+    to: 'llle8evvv@yandex.ru',
     subject: 'Test message subject',
     html: 'Message = ' + message,
   })
